@@ -29,13 +29,16 @@ module ZAC
         @http.get('/signovate/Logon/logoff.asp', 'Cookie' => @cookie)
     end
 
-    #勤務表アウトプット
+    #勤務情報アウトプット
     def getKinmu
+        print "\n実行中\n\n"
         response = @http.get("https://signovate.jp.oro.com/signovate/Output/CSV/KinmuhyouCSV.asp?status=&type_meisai=1&y_date_begin=2016&m_date_begin=6&d_date_begin=1&y_date_end=2016&m_date_end=6&d_date_end=30&id_bumon=&id_member_yakushoku=&code_member=&name_member=&time_card_in_begin_h=&time_card_in_begin_m=0&time_card_in_end_h=&time_card_in_end_m=0&time_card_out_begin_h=&time_card_out_begin_m=0&time_card_out_end_h=&time_card_out_end_m=0&time_in_begin_h=&time_in_begin_m=0&time_in_end_h=&time_in_end_m=0&time_out_begin_h=&time_out_begin_m=0&time_out_end_h=&time_out_end_m=0&type_minute_other=0&minute_other_begin_h=0&minute_other_begin_m=0&minute_other_end_h=0&minute_other_end_m=0&shukei_unit_1=0&shukei_unit_2=0&shukei_unit_3=0&time_unit=1&__page_id=", 'Cookie' => @cookie)
         data = CSV.parse(response.body.encode('utf-8', 'sjis'))
-        filter(data)
+        filtered = filter(data)
+        puts filtered
     end
 
+    private
     def filter(data)
         output = data.delete_if do |line|
 
@@ -71,7 +74,7 @@ module ZAC
 
         end.join
 
-        puts output
+        output
 
     end
 end
