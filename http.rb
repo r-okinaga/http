@@ -103,6 +103,7 @@ class ZAC
         kinmu_filter(data)
     end
 
+    #原価管理明細アウトプット
     def get_uriage(start_date, end_date)
         response = @http.get(
             'https://signovate.jp.oro.com/signovate/Output/CSV/GenkaMeisaiCSV.asp?%s'%
@@ -193,8 +194,7 @@ user_name = gets.to_s.chomp
 print "パスワードを入力してください\n"
 password = STDIN.noecho(&:gets).chomp
 print "アウトプットを番号で選んでください\n"
-puts "1 日報未確定日数"
-puts "2 当月売上・粗利"
+puts "1 日報未確定日数\n2 当月売上・粗利"
 num = gets.to_i
 
 #本来は入力させる
@@ -203,9 +203,7 @@ end_date = Date.parse('2016/6/30')
 
 ZAC.open(user_name, password) do |z|
     print "\n実行中\n\n"
-
     data = z.choice_output(num, start_date, end_date)
-
     case num
         when 1
             puts data.map {|name, days|
